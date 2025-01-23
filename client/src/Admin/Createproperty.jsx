@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Input from "../Ui/ux/Button";
 import {
   getDownloadURL,
@@ -10,8 +10,6 @@ import {
 import { app } from "../firebase";
 
 const Createproperty = () => {
-  const mapRef = useRef(null);
-  const markerRef = useRef(null);
   // Define state for each input field
   const [formData, setFormData] = useState({
     name: "",
@@ -38,58 +36,9 @@ const Createproperty = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-    if (mapRef.current) {
-      initMap(); // Initialize map only if mapRef is available
-    }
-  }, [mapRef]);
+  
 
-  const initMap = () => {
-    const initialPosition = { lat: -1.286389, lng: 36.817223 };
-    const map = new window.google.maps.Map(mapRef.current, {
-      center: initialPosition,
-      zoom: 12,
-    });
 
-    const marker = new window.google.maps.Marker({
-      position: initialPosition,
-      map: map,
-      draggable: true,
-    });
-
-    markerRef.current = marker;
-
-    marker.addListener("dragend", () => {
-      const newLat = marker.getPosition().lat();
-      const newLng = marker.getPosition().lng();
-      setFormData((prev) => ({
-        ...prev,
-        location: {
-          ...prev.location,
-          address: { lat: newLat, lng: newLng, location: "" },
-        },
-      }));
-      reverseGeocode(newLat, newLng);
-    });
-  };
-
-  const reverseGeocode = (lat, lng) => {
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-      if (status === "OK" && results[0]) {
-        setFormData((prev) => ({
-          ...prev,
-          location: {
-            ...prev.location,
-            address: {
-              ...prev.location.address,
-              location: results[0].formatted_address,
-            },
-          },
-        }));
-      }
-    });
-  };
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -437,10 +386,7 @@ const Createproperty = () => {
         </div>
 
         {/* Google Map for Location Selection */}
-        <div className="col-span-full mt-6">
-          <h4 className="text-lg font-semibold">Select Location on Map:</h4>
-          <div ref={mapRef} className="h-64 w-full rounded border"></div>
-        </div>
+       
 
         {/* Submit Button */}
         <div className="col-span-full mt-6">

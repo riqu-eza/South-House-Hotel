@@ -39,7 +39,7 @@ app.use(cookieParser());
 
 // Create HTTP server and attach Socket.IO
 const server = createServer(app); // Express runs on this server
-io.attach(server); // Attach Socket.IO to the HTTP server
+// io.attach(server); // Attach Socket.IO to the HTTP server
 
 // Routes
 app.use("/api/listing", listingRouter);
