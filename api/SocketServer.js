@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 
-const io = new Server(3005, {
+const io = new Server(3009, {
   cors: {
     origin: ["http://localhost:5173",'https://southhousehotel.com/'] // Replace with your frontend URL
   },

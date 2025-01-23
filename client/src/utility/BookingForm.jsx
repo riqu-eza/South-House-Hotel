@@ -44,8 +44,8 @@ const BookingForm = ({ price, initialData, type }) => {
 
   // Dynamic WebSocket URL based on the environment
   const socketURL = isDevelopment
-    ? "http://localhost:3005" // Development
-    : "https://cosytwobedroominthika.online"; // Production
+    ? "http://localhost:3009" // Development
+    : "https://southhousehotel.com/"; // Production
 
   // WebSocket setup for payment confirmation
   useEffect(() => {
@@ -72,6 +72,7 @@ const BookingForm = ({ price, initialData, type }) => {
       socket.disconnect();
       console.log("Disconnected from WebSocket server.");
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array ensures the WebSocket initializes only once
 
   const handleInputChange = (e) => {
