@@ -31,7 +31,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://cosytwobedroominthika.online', "http://localhost:5173"],
+  origin: ['https://southhousehotel.com/', "http://localhost:5173"],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
@@ -68,6 +68,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-server.listen(3004, () => {
-  console.log("Server is running on port 3004");
+server.listen(3010, () => {
+  console.log("Server is running on port 3010");
 });
