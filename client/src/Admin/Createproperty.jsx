@@ -41,7 +41,7 @@ const Createproperty = () => {
 
 
   const handleImageSubmit = () => {
-    if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+    if (files.length > 0 && files.length + formData.imageUrls.length < 25) {
       setUploading(true);
       setImageUploadError(false);
       const promises = [];
@@ -66,7 +66,7 @@ const Createproperty = () => {
       setImageUploadError("Select images to upload");
       setUploading(false);
     } else {
-      setImageUploadError("You can only upload 6 images per listing");
+      setImageUploadError("You can only upload 25 images per listing");
       setUploading(false);
     }
   };

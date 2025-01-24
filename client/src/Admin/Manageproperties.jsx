@@ -150,8 +150,8 @@ const ManageProperty = () => {
       setImageUploadError("Select images to upload");
       return;
     }
-    if (tempImages.length + files.length > 6) {
-      setImageUploadError("You can only have up to 6 images in total.");
+    if (tempImages.length + files.length > 25) {
+      setImageUploadError("You can only have up to 20 images in total.");
       return;
     }
 
