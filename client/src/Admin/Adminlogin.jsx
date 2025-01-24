@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 
-const CORRECT_PASSWORD = "yourSecret123"; // store in .env for better security
+const CORRECT_PASSWORD = "Southhouse2025"; // store in .env for better security
 
 const AdminLogin = ({ onSuccess }) => {
   const [password, setPassword] = useState("");
