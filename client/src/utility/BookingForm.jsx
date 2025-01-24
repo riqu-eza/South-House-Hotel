@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const BookingForm = ({ price, initialData, type }) => {
+const BookingForm = ({ price, initialData, type, manageremail }) => {
   const [showBookingOverlay, setShowBookingOverlay] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState(""); // for MPesa
   const [paymentStatus, setPaymentStatus] = useState(null);
@@ -94,6 +94,7 @@ const BookingForm = ({ price, initialData, type }) => {
       totalNights,
       totalCost,
       type,
+      manageremail,
       formDetails,
     };
 

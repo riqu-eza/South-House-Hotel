@@ -369,6 +369,7 @@ const Home = () => {
                 checkOutDate: bookingData.checkOut,
                 guestNumber: bookingData.guests,
               }}
+              manageremail={property.email}
             />
           </div>
           <div>

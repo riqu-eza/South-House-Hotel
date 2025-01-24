@@ -21,6 +21,7 @@ export const createBooking = async (req, res, next) => {
     receiptNumber,
     totalCost,
     guestNumber,
+    manageremail,
     type, // Added
     formDetails,
   } = req.body;
@@ -33,6 +34,7 @@ export const createBooking = async (req, res, next) => {
       receiptNumber, // Ensure this is handled correctly
       totalCost,
       guestNumber,
+      manageremail,
       type, // Ensure 'type' is included
       formDetails,
     });
@@ -115,7 +117,38 @@ export const createBooking = async (req, res, next) => {
       <p>We look forward to hosting you!</p>
       <p>Best regards,<br/>The Booking Team</p>
       `;
-
+      const emailBodyToManager = `
+      <h2 style="color: #4CAF50;">New Booking Notification</h2>
+      <p>Dear Property Manager,</p>
+      <p>A new booking has been made for your property. Here are the details:</p>
+      <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+              <th style="border: 1px solid #ddd; padding: 8px;">Detail</th>
+              <th style="border: 1px solid #ddd; padding: 8px;">Information</th>
+          </tr>
+          <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;"><strong>Check-In Date:</strong></td>
+              <td style="border: 1px solid #ddd; padding: 8px;">${checkInDate}</td>
+          </tr>
+          <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;"><strong>Check-Out Date:</strong></td>
+              <td style="border: 1px solid #ddd; padding: 8px;">${checkOutDate}</td>
+          </tr>
+          <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;"><strong>Guests:</strong></td>
+              <td style="border: 1px solid #ddd; padding: 8px;">${guestNumber}</td>
+          </tr>
+          <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;"><strong>Booker's Name:</strong></td>
+              <td style="border: 1px solid #ddd; padding: 8px;">${formDetails.firstName} ${formDetails.lastName}</td>
+          </tr>
+          <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;"><strong>Booker's Email:</strong></td>
+              <td style="border: 1px solid #ddd; padding: 8px;">${formDetails.email}</td>
+          </tr>
+      </table>
+      <p>Please review the booking at your earliest convenience.</p>
+      `;
       const attachments = [
         {
           filename: `${newBooking._id}-receipt.pdf`,
@@ -128,6 +161,12 @@ export const createBooking = async (req, res, next) => {
         "Your Booking Confirmation",
         emailBody,
         attachments
+      );
+
+      await sendEmail(
+        manageremail,
+        "New Booking Notification",
+        emailBodyToManager
       );
       
       // Save the new booking
