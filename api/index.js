@@ -48,7 +48,7 @@ app.use("/api/booking", BookingRouter);
 app.use("/api/payments", paymentsRouter);
 app.use("/api/admin", AdminRouter);
 app.use("/api/comment", CommentRouter);
-app.use("/api/site",SiteRouter)
+app.use("/api/site", SiteRouter)
 // Static Files
 app.use(express.static(path.join(__dirname, "/client/dist")));
 app.get("*", (req, res) => {
