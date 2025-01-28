@@ -1,3 +1,4 @@
+// src/components/Home.jsx
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Amenity from "../utility/amenity";
@@ -8,19 +9,22 @@ import Viewall from "../utility/images_commect";
 const Home = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(true);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [sites, setSites] = useState([]);
 
   const [bookingData, setBookingData] = useState({
     checkIn: "",
     checkOut: "",
     guests: 1,
   });
+  const API_URL = "/api/site";
 
   const propertyDescriptionRef = useRef(null);
   const bookingFormRef = useRef(null);
   const [availability, setAvailability] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,7 +33,7 @@ const Home = () => {
           throw new Error("Network response was not ok");
         }
         const result = await response.json();
-        console.log(result)
+        console.log(result);
         setData(result);
         setSelectedProperty(result[0] || null);
         console.log("result", result);
@@ -43,6 +47,23 @@ const Home = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const loadSites = async () => {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error("Failed to fetch sites.");
+        }
+        const data = await response.json();
+        setSites(data);
+      } catch (err) {
+        setError(err.message || "An error occurred.");
+      }
+    };
+
+    loadSites();
+  }, []);
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setBookingData((prevData) => ({
@@ -50,6 +71,7 @@ const Home = () => {
       [id]: value, // Dynamically update the field based on input ID
     }));
   };
+
   const checkAvailability = async () => {
     try {
       const response = await fetch("/api/booking/check", {
@@ -74,7 +96,7 @@ const Home = () => {
         setMessage("The selected dates are not available.");
         setTimeout(() => {
           setMessage("");
-          setBookingData(""); // Clear the message
+          setBookingData((prev) => ({ ...prev, checkIn: "", checkOut: "", guests: 1 })); // Reset bookingData to initial state
         }, 10000);
       }
     } catch (error) {
@@ -82,23 +104,25 @@ const Home = () => {
       setMessage("An error occurred while checking availability.");
     }
   };
+
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
 
   const property = data.length > 0 ? data[0] : null;
 
   // Safely access amenities and rules, defaulting to an empty array if `property` is `null`
   const amenitiesArray =
-  selectedProperty?.amenities?.[0]?.split(",").map((amenity) => amenity.trim()) || [];
+    selectedProperty?.amenities?.[0]?.split(",").map((amenity) => amenity.trim()) || [];
   // const rules = property?.rules
   //   ? property.rules.split(",").map((rule) => rule.trim())
   //   : [];
-  const mapIframe = selectedProperty.location.mapurl[0];
+  const mapIframe = selectedProperty?.location?.mapurl?.[0] || "";
 
-  const srcUrl = mapIframe.match(/src="([^"]*)"/)?.[1];
+  const srcUrl = mapIframe.match(/src="([^"]*)"/)?.[1] || "";
 
   return (
     <>
+      {/* Navigation Bar */}
       <nav className="flex justify-center gap-4 p-4 bg-gray-200">
         {data.map((property, index) => (
           <button
@@ -107,8 +131,8 @@ const Home = () => {
             className={`px-4 py-2 rounded-lg ${
               selectedProperty?._id === property._id
                 ? "bg-blue-500 text-white"
-                : "bg-white"
-            } hover:bg-blue-400`}
+                : "bg-white text-gray-700"
+            } hover:bg-blue-400 transition-colors duration-200`}
           >
             {property.type || `Property ${index + 1}`}
           </button>
@@ -117,10 +141,11 @@ const Home = () => {
 
       {selectedProperty ? (
         <>
+          {/* Header Section */}
           <div className="flex flex-wrap items-center w-full gap-2 p-2">
             {/* Left Section */}
             <div className="flex-1 min-w-[200px] p-2">
-              {property ? (
+              {selectedProperty ? (
                 <h2 className="text-center text-xl sm:text-2xl font-bold font-[Poppins] ">
                   {selectedProperty.name}
                 </h2>
@@ -137,7 +162,7 @@ const Home = () => {
                 <Link to="/" className="text-sm sm:text-base hover:underline">
                   Home
                 </Link>
-                <Link
+                <button
                   onClick={() =>
                     propertyDescriptionRef.current.scrollIntoView({
                       behavior: "smooth",
@@ -146,8 +171,8 @@ const Home = () => {
                   className="text-sm sm:text-base hover:underline"
                 >
                   About
-                </Link>
-                <Link
+                </button>
+                <button
                   onClick={() =>
                     bookingFormRef.current.scrollIntoView({
                       behavior: "smooth",
@@ -156,7 +181,7 @@ const Home = () => {
                   className="text-sm sm:text-base hover:underline"
                 >
                   Book Now
-                </Link>
+                </button>
               </nav>
             </div>
           </div>
@@ -170,14 +195,14 @@ const Home = () => {
                 className="w-full h-full object-cover"
               />
             )}
+            {/* Overlay with Main Header and Subheader */}
             <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col gap-6 items-center justify-center p-4">
               <h1 className="text-white font-[Poppins] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center animate-slide-in">
-                Great Experiences Are Just Around the Corner
+                {sites[0]?.mainheader || "Welcome to Our Property"}
               </h1>
               <p className="text-center font-[Montserrat] text-sm sm:text-base md:text-lg lg:text-xl text-white max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
-                Welcome to your serene escape! Enjoy the tranquility and comfort
-                of this beautiful property, where every moment is an invitation
-                to unwind and rejuvenate.
+                {sites[0]?.subheader ||
+                  "Experience unparalleled comfort and serenity in our exquisite property, where every detail is crafted for your ultimate relaxation."}
               </p>
             </div>
           </div>
@@ -269,7 +294,7 @@ const Home = () => {
               <>
                 {/* Description Section */}
                 <div className="w-full lg:w-1/2 h-auto lg:h-[450px] p-4 text-center text-stone-500 flex flex-col justify-center items-center">
-                  <p className="first-letter:font-thin font-[Montserrat]  first-letter:text-7xl">
+                  <p className="first-letter:font-thin font-[Montserrat] first-letter:text-7xl">
                     {selectedProperty.description}
                   </p>
                 </div>
@@ -292,7 +317,7 @@ const Home = () => {
             )}
           </div>
 
-          {/* Propert amenities and rules */}
+          {/* Property Amenities and Rules */}
           <div className="p-1 m-1 mt-12 flex flex-col lg:flex-row gap-4">
             {selectedProperty ? (
               <>
@@ -316,7 +341,7 @@ const Home = () => {
                       <p className="text-center font-[Poppins] font-bold">
                         Amenities You Will Find
                       </p>
-                      <div className="flex flex-wrap font-[Montserrat]  justify-center mt-2">
+                      <div className="flex flex-wrap font-[Montserrat] justify-center mt-2">
                         {amenitiesArray.map((amenity, index) => (
                           <Amenity key={index} amenity={amenity} />
                         ))}
@@ -325,7 +350,7 @@ const Home = () => {
 
                     {/* Check-in and Check-out Info */}
                     <div className="w-full md:w-1/2">
-                      <p className="text-left text-sm font-[Montserrat]  lg:text-base">
+                      <p className="text-left text-sm font-[Montserrat] lg:text-base">
                         ✔️ We always welcome our visitors at{" "}
                         <span className="font-semibold">
                           {selectedProperty.checkInTime}
@@ -348,6 +373,7 @@ const Home = () => {
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
+                      className="rounded-lg"
                     ></iframe>
                   </div>
                 </div>
@@ -359,7 +385,7 @@ const Home = () => {
             )}
           </div>
 
-          {/*booking section  */}
+          {/* Booking Section */}
           <div ref={bookingFormRef}>
             <BookingForm
               price={selectedProperty.pricePerNight}
@@ -369,12 +395,16 @@ const Home = () => {
                 checkOutDate: bookingData.checkOut,
                 guestNumber: bookingData.guests,
               }}
-              manageremail={property.email}
+              manageremail={selectedProperty.email}
             />
           </div>
+
+          {/* View All Section */}
           <div>
             <Viewall property={selectedProperty} />
           </div>
+
+          {/* Footer */}
           <Footer data={selectedProperty} />
         </>
       ) : (

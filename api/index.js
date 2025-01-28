@@ -6,6 +6,7 @@ import BookingRouter from "./Routes/Booking.Route.js";
 import paymentsRouter from "./Routes/Payments.Route.js";
 import AdminRouter from "./Routes/Admin.Route.js";
 import CommentRouter from "./Routes/Comment.Route.js";
+import SiteRouter from "./Routes/Site.Route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
@@ -47,7 +48,7 @@ app.use("/api/booking", BookingRouter);
 app.use("/api/payments", paymentsRouter);
 app.use("/api/admin", AdminRouter);
 app.use("/api/comment", CommentRouter);
-
+app.use("/api/site",SiteRouter)
 // Static Files
 app.use(express.static(path.join(__dirname, "/client/dist")));
 app.get("*", (req, res) => {
