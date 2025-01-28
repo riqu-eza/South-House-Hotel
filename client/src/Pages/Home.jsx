@@ -6,6 +6,7 @@ import BookingForm from "../utility/BookingForm";
 import Footer from "../components/footer";
 import Viewall from "../utility/images_commect";
 
+
 const Home = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +20,7 @@ const Home = () => {
     checkOut: "",
     guests: 1,
   });
-  const API_URL = "/api/site";
+  
 
   const propertyDescriptionRef = useRef(null);
   const bookingFormRef = useRef(null);
@@ -50,7 +51,7 @@ const Home = () => {
   useEffect(() => {
     const loadSites = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch("/api/site/getall");
         if (!response.ok) {
           throw new Error("Failed to fetch sites.");
         }
@@ -108,6 +109,7 @@ const Home = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
+  // eslint-disable-next-line no-unused-vars
   const property = data.length > 0 ? data[0] : null;
 
   // Safely access amenities and rules, defaulting to an empty array if `property` is `null`

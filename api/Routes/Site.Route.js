@@ -7,7 +7,7 @@ router.post("/create", addSiteData);
 
 // Get all sites
 router.get("/", getAllSites);
-
+router.get("/getall", getAllSites);
 // Get a single site by ID
 router.get("/:id", getSiteById);
 
