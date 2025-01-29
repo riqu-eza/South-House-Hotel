@@ -198,7 +198,7 @@ const Home = () => {
               />
             )}
             {/* Overlay with Main Header and Subheader */}
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col gap-6 items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black bg-opacity-0 flex flex-col gap-6 items-center justify-center p-4">
               <h1 className="text-white font-[Poppins] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center animate-slide-in">
                 {sites[0]?.mainheader || "Welcome to Our Property"}
               </h1>
