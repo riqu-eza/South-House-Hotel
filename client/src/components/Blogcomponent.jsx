@@ -92,7 +92,7 @@ const BlogComponent = () => {
               {/* Blog Image */}
               <div className="h-40 overflow-hidden rounded-t-xl">
                 <img
-                  src={blog.imageUrls?.[0] || "https://source.unsplash.com/featured/?abstract,gradient"}
+                  src={blog.imageUrls?.[0] || "/fallback.png"}
                   alt={blog.title}
                   className="w-full h-full object-cover"
                 />
@@ -136,7 +136,7 @@ const BlogComponent = () => {
             </h2>
             <div className="h-56 overflow-hidden rounded-lg mb-4">
               <img
-                src={selectedBlog.imageUrls?.[0] || "/fallback.jpg"}
+                src={selectedBlog.imageUrls?.[0] || "/fallback.png"}
                 alt="Blog"
                 className="w-full h-full object-cover"
               />
