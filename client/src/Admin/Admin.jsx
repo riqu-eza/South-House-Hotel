@@ -29,7 +29,9 @@ const Admin = () => {
     <div className="h-screen w-screen flex items-center justify-center bg-gray-100">
       {isAuthenticated ? (
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-4 text-center">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-4 text-center">
+            Admin Dashboard
+          </h1>
           <p className="text-gray-600 mb-6 text-center">
             Welcome to your admin control panel. Choose an action:
           </p>
@@ -46,6 +48,12 @@ const Admin = () => {
               className="text-white bg-blue-500 px-4 py-2 rounded-md font-semibold text-center hover:bg-blue-600 transition duration-200"
             >
               Add Book Date
+            </Link>
+            <Link
+              to="/addblog"
+              className="block bg-green-500 text-white text-center py-2 rounded hover:bg-green-600 transition duration-200"
+            >
+              Add Blog
             </Link>
             <Link
               to="/viewbookings"
