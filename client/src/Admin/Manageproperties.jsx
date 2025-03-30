@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 // import { app } from "PATH_TO_YOUR_FIREBASE_CONFIG";
 
 const ManageProperty = () => {
@@ -59,11 +64,14 @@ const ManageProperty = () => {
 
   const handleUpdate = async (updatedProperty) => {
     try {
-      const response = await fetch(`/api/listing/update/${updatedProperty._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProperty),
-      });
+      const response = await fetch(
+        `/api/listing/update/${updatedProperty._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedProperty),
+        }
+      );
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to update property");
@@ -113,7 +121,7 @@ const ManageProperty = () => {
 
   // Button to open the Manage Images modal
   const handleManageImages = (property) => {
-    setEditProperty(property); 
+    setEditProperty(property);
     setTempImages(property.imageUrls || []);
     setFiles([]);
     setImageUploadError(null);
@@ -125,7 +133,10 @@ const ManageProperty = () => {
     if (index === 0) return; // already at the top
     setTempImages((prev) => {
       const newImages = [...prev];
-      [newImages[index], newImages[index - 1]] = [newImages[index - 1], newImages[index]];
+      [newImages[index], newImages[index - 1]] = [
+        newImages[index - 1],
+        newImages[index],
+      ];
       return newImages;
     });
   };
@@ -134,7 +145,10 @@ const ManageProperty = () => {
     if (index === tempImages.length - 1) return; // already at the bottom
     setTempImages((prev) => {
       const newImages = [...prev];
-      [newImages[index], newImages[index + 1]] = [newImages[index + 1], newImages[index]];
+      [newImages[index], newImages[index + 1]] = [
+        newImages[index + 1],
+        newImages[index],
+      ];
       return newImages;
     });
   };
@@ -246,121 +260,120 @@ const ManageProperty = () => {
 
       {/* -------- EDIT PROPERTY MODAL -------- */}
       {editProperty && !showImageManager && (
-  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-10">
-    <div className="bg-white p-6 rounded shadow-lg max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
-      <h2 className="text-xl font-bold mb-4">Edit Property</h2>
-      <form
-        className="grid grid-cols-2 gap-4"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const formData = new FormData(e.target);
-          const updatedProperty = Object.fromEntries(formData.entries());
-          updatedProperty._id = editProperty._id;
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-10">
+          <div className="bg-white p-6 rounded shadow-lg max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">Edit Property</h2>
+            <form
+              className="grid grid-cols-2 gap-4"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const updatedProperty = Object.fromEntries(formData.entries());
+                updatedProperty._id = editProperty._id;
 
-          // Keep the existing images from the current editProperty
-          updatedProperty.imageUrls = editProperty.imageUrls;
+                // Keep the existing images from the current editProperty
+                updatedProperty.imageUrls = editProperty.imageUrls;
 
-          // Example: if you want to handle single-file upload from within this modal:
-          // if (formData.get("image").name) {
-          //   const newImageUrl = await handleImageUpload(formData.get("image"));
-          //   if (newImageUrl) updatedProperty.imageUrls = [newImageUrl];
-          // }
+                // Example: if you want to handle single-file upload from within this modal:
+                // if (formData.get("image").name) {
+                //   const newImageUrl = await handleImageUpload(formData.get("image"));
+                //   if (newImageUrl) updatedProperty.imageUrls = [newImageUrl];
+                // }
 
-          // You can capture changes to description, name, etc.:
-          // If you need them in numeric form, parse them here
-          // e.g. updatedProperty.pricePerNight = parseFloat(updatedProperty.pricePerNight);
+                // You can capture changes to description, name, etc.:
+                // If you need them in numeric form, parse them here
+                // e.g. updatedProperty.pricePerNight = parseFloat(updatedProperty.pricePerNight);
 
-          handleUpdate(updatedProperty);
-        }}
-      >
-        <label className="block col-span-2">
-          Name:
-          <input
-            name="name"
-            defaultValue={editProperty.name}
-            className="border w-full px-2 py-1 rounded"
-            required
-          />
-        </label>
-        <label className="block col-span-2">
-          Type:
-          <input
-            name="type"
-            defaultValue={editProperty.type}
-            className="border w-full px-2 py-1 rounded"
-            required
-          />
-        </label>
-        <label className="block col-span-2">
-          Description:
-          <textarea
-            name="description"
-            defaultValue={editProperty.description}
-            className="border w-full px-2 py-1 rounded"
-          />
-        </label>
-        <label className="block">
-          Price Per Night:
-          <input
-            name="pricePerNight"
-            defaultValue={editProperty.pricePerNight}
-            className="border w-full px-2 py-1 rounded"
-            required
-          />
-        </label>
-        <label className="block">
-          Check-In Time:
-          <input
-            name="checkInTime"
-            defaultValue={editProperty.checkInTime}
-            className="border w-full px-2 py-1 rounded"
-          />
-        </label>
-        <label className="block">
-          Email:
-          <input
-            name="email"
-            defaultValue={editProperty.email}
-            className="border w-full px-2 py-1 rounded"
-          />
-        </label>
-        <label className="block">
-          Amenities (comma-separated):
-          <textarea
-            name="amenities"
-            defaultValue={(editProperty.amenities || []).join(", ")}
-            className="border w-full px-2 py-1 rounded"
-          />
-        </label>
-        <label className="block">
-          Rules (comma-separated):
-          <textarea
-            name="rules"
-            defaultValue={(editProperty.rules || []).join(", ")}
-            className="border w-full px-2 py-1 rounded"
-          />
-        </label>
+                handleUpdate(updatedProperty);
+              }}
+            >
+              <label className="block col-span-2">
+                Name:
+                <input
+                  name="name"
+                  defaultValue={editProperty.name}
+                  className="border w-full px-2 py-1 rounded"
+                  required
+                />
+              </label>
+              <label className="block col-span-2">
+                Type:
+                <input
+                  name="type"
+                  defaultValue={editProperty.type}
+                  className="border w-full px-2 py-1 rounded"
+                  required
+                />
+              </label>
+              <label className="block col-span-2">
+                Description:
+                <textarea
+                  name="description"
+                  defaultValue={editProperty.description}
+                  className="border w-full px-2 py-1 rounded"
+                />
+              </label>
+              <label className="block">
+                Price Per Night:
+                <input
+                  name="pricePerNight"
+                  defaultValue={editProperty.pricePerNight}
+                  className="border w-full px-2 py-1 rounded"
+                  required
+                />
+              </label>
+              <label className="block">
+                Check-In Time:
+                <input
+                  name="checkInTime"
+                  defaultValue={editProperty.checkInTime}
+                  className="border w-full px-2 py-1 rounded"
+                />
+              </label>
+              <label className="block">
+                Email:
+                <input
+                  name="email"
+                  defaultValue={editProperty.email}
+                  className="border w-full px-2 py-1 rounded"
+                />
+              </label>
+              <label className="block">
+                Amenities (comma-separated):
+                <textarea
+                  name="amenities"
+                  defaultValue={(editProperty.amenities || []).join(", ")}
+                  className="border w-full px-2 py-1 rounded"
+                />
+              </label>
+              <label className="block">
+                Rules (comma-separated):
+                <textarea
+                  name="rules"
+                  defaultValue={(editProperty.rules || []).join(", ")}
+                  className="border w-full px-2 py-1 rounded"
+                />
+              </label>
 
-        <div className="col-span-2 flex justify-end mt-4">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-          >
-            Save
-          </button>
-          <button
-            type="button"
-            className="bg-gray-300 px-4 py-2 rounded"
-            onClick={() => setEditProperty(null)}
-          >
-            Cancel
-          </button>
+              <div className="col-span-2 flex justify-end mt-4">
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={() => setEditProperty(null)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-)}
-
+      )}
 
       {/* -------- MANAGE IMAGES MODAL -------- */}
       {showImageManager && editProperty && (
