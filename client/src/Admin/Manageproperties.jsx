@@ -363,94 +363,95 @@ const ManageProperty = () => {
 
       {/* -------- MANAGE IMAGES MODAL -------- */}
       {showImageManager && editProperty && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-20">
-          <div className="bg-white p-6 rounded shadow-lg max-w-3xl w-full relative">
-            <h2 className="text-xl font-bold mb-4">Manage Images for {editProperty.name}</h2>
-            
-            {/* Current Images Section */}
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Current Images</h3>
-              {tempImages.length === 0 ? (
-                <p className="text-sm text-gray-500">No images yet.</p>
-              ) : (
-                <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {tempImages.map((url, index) => (
-                    <li key={index} className="relative border rounded p-2">
-                      <img
-                        src={url}
-                        alt={`property_image_${index}`}
-                        className="w-full h-32 object-cover rounded"
-                      />
-                      <div className="flex justify-between mt-2">
-                        <button
-                          className="bg-blue-500 text-white px-2 py-1 text-sm rounded disabled:bg-gray-300"
-                          onClick={() => moveImageUp(index)}
-                          disabled={index === 0}
-                        >
-                          Up
-                        </button>
-                        <button
-                          className="bg-blue-500 text-white px-2 py-1 text-sm rounded disabled:bg-gray-300"
-                          onClick={() => moveImageDown(index)}
-                          disabled={index === tempImages.length - 1}
-                        >
-                          Down
-                        </button>
-                        <button
-                          className="bg-red-500 text-white px-2 py-1 text-sm rounded"
-                          onClick={() => handleRemoveImage(index)}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-20">
+    <div className="bg-white p-6 rounded shadow-lg max-w-3xl w-full relative max-h-[90vh] overflow-y-auto">
+      <h2 className="text-xl font-bold mb-4">Manage Images for {editProperty.name}</h2>
+      
+      {/* Current Images Section */}
+      <div className="mb-4">
+        <h3 className="font-semibold mb-2">Current Images</h3>
+        {tempImages.length === 0 ? (
+          <p className="text-sm text-gray-500">No images yet.</p>
+        ) : (
+          <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {tempImages.map((url, index) => (
+              <li key={index} className="relative border rounded p-2">
+                <img
+                  src={url}
+                  alt={`property_image_${index}`}
+                  className="w-full h-32 object-cover rounded"
+                />
+                <div className="flex justify-between mt-2">
+                  <button
+                    className="bg-blue-500 text-white px-2 py-1 text-sm rounded disabled:bg-gray-300"
+                    onClick={() => moveImageUp(index)}
+                    disabled={index === 0}
+                  >
+                    Up
+                  </button>
+                  <button
+                    className="bg-blue-500 text-white px-2 py-1 text-sm rounded disabled:bg-gray-300"
+                    onClick={() => moveImageDown(index)}
+                    disabled={index === tempImages.length - 1}
+                  >
+                    Down
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-2 py-1 text-sm rounded"
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
-            {/* Add New Images Section */}
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Add New Images</h3>
-              <input
-                type="file"
-                multiple
-                onChange={(e) => setFiles([...e.target.files])}
-                className="block mb-2"
-              />
-              <button
-                onClick={handleImageSubmit}
-                className="bg-green-500 text-white px-3 py-1 rounded mr-2"
-                disabled={uploading}
-              >
-                {uploading ? "Uploading..." : "Upload"}
-              </button>
-              {imageUploadError && (
-                <p className="text-red-500 text-sm mt-2">{imageUploadError}</p>
-              )}
-            </div>
+      {/* Add New Images Section */}
+      <div className="mb-4">
+        <h3 className="font-semibold mb-2">Add New Images</h3>
+        <input
+          type="file"
+          multiple
+          onChange={(e) => setFiles([...e.target.files])}
+          className="block mb-2"
+        />
+        <button
+          onClick={handleImageSubmit}
+          className="bg-green-500 text-white px-3 py-1 rounded mr-2"
+          disabled={uploading}
+        >
+          {uploading ? "Uploading..." : "Upload"}
+        </button>
+        {imageUploadError && (
+          <p className="text-red-500 text-sm mt-2">{imageUploadError}</p>
+        )}
+      </div>
 
-            {/* Action Buttons */}
-            <div className="flex justify-end mt-4">
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleSaveImages}
-              >
-                Save Images
-              </button>
-              <button
-                className="bg-gray-300 px-4 py-2 rounded"
-                onClick={() => {
-                  setShowImageManager(false);
-                  setEditProperty(null);
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Action Buttons */}
+      <div className="flex justify-end mt-4">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+          onClick={handleSaveImages}
+        >
+          Save Images
+        </button>
+        <button
+          className="bg-gray-300 px-4 py-2 rounded"
+          onClick={() => {
+            setShowImageManager(false);
+            setEditProperty(null);
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
