@@ -34,7 +34,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['https://southhousehotel.com/', "http://localhost:5173"],
+  origin: ['https://southhousehotel.com', "http://localhost:5173"],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));

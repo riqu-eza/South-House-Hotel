@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3010',
+        target: 'https://south-house-hotel.onrender.com',
         secure: false,
       },
     },

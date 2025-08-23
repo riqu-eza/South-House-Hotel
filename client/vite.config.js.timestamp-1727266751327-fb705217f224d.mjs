@@ -5,7 +5,7 @@ var vite_config_default = defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3004",
+        target: "https://south-house-hotel.onrender.com",
         secure: false
       }
     }
